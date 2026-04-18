@@ -1,8 +1,11 @@
 import Fastify from "fastify"
+import cors from "@fastify/cors"
 import Argon2 from "argon2"
 import JWT from "jsonwebtoken"
 
 const fastify = Fastify()
+
+fastify.register( cors )
 
 const users = new Map()
 

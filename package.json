@@ -1,4 +1,7 @@
 {
 	"name": "n6",
-	"type": "module"
+	"type": "module",
+	"scripts": {
+		"dev:api": "pnpm --filter @n6/api dev"
+	}
 }

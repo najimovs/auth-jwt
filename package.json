@@ -2,6 +2,7 @@
 	"name": "n6",
 	"type": "module",
 	"scripts": {
-		"dev:api": "pnpm --filter @n6/api dev"
+		"dev:api": "pnpm --filter @n6/api dev",
+		"dev:web": "pnpm --filter @n6/web dev"
 	}
 }

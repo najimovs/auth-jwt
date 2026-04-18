@@ -1,9 +1,12 @@
 import Fastify from "fastify"
 import Argon2 from "argon2"
+import JWT from "jsonwebtoken"
 
 const fastify = Fastify()
 
 const users = new Map()
+
+const JWT_SECRET = "chubakabra"
 
 fastify.get( "/", () => ( { message: "ok" } ) )
 
@@ -25,9 +28,16 @@ fastify.post( "/join", async ( req, res ) => {
 		password,
 	} )
 
-	console.log( users )
+	const payload = {
+		username,
+	}
 
-	return { username, email }
+	const token = await JWT.sign( payload, JWT_SECRET )
+
+	return {
+		username,
+		token
+	}
 } )
 
 fastify.listen( { port: 3_000 } )

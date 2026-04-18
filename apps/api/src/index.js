@@ -9,9 +9,42 @@ fastify.register( cors )
 
 const users = new Map()
 
+users.set( "madina", {
+	is_admin: true,
+	email: "madina@gmail.com",
+} )
+
 const JWT_SECRET = "chubakabra"
 
 fastify.get( "/", () => ( { message: "ok" } ) )
+
+fastify.get( "/users", async ( req, res ) => {
+
+	if ( !req.headers.authorization ) {
+
+		return res.status( 401 ).send( {
+			code: "APP_UNAUTHORIZED",
+		} )
+	}
+
+	const token = req.headers.authorization.substr( 6 ).trim()
+
+	try {
+
+		const payload = await JWT.verify( token, JWT_SECRET )
+
+		console.log( payload )
+	}
+	catch( error ) {
+
+		res.status( 401 ).send( {
+			code: "APP_UNAUTHORIZED",
+			message: error.message,
+		} )
+	}
+
+	return [ ...users.keys() ]
+} )
 
 fastify.post( "/join", async ( req, res ) => {
 
@@ -33,6 +66,7 @@ fastify.post( "/join", async ( req, res ) => {
 
 	const payload = {
 		username,
+		is_admin: false,
 	}
 
 	const token = await JWT.sign( payload, JWT_SECRET )

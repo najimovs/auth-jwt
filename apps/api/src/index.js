@@ -3,7 +3,7 @@ import cors from "@fastify/cors"
 import routes from "./routes/index.js"
 
 const PORT = parseInt( process.env.PORT || "3000" )
-const fastify = Fastify()
+const fastify = Fastify( { logger: true } )
 
 fastify.register( cors )
 fastify.register( routes )

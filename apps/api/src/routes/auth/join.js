@@ -6,9 +6,34 @@ const ONE_MINUTE = 60
 const JWT_ACCESS_SECRET = process.env.VITE_JWT_ACCESS_SECRET
 const JWT_REFRESH_SECRET = process.env.VITE_JWT_REFRESH_SECRET
 
+export const schema = {
+	schema: {
+		body: {
+			type: "object",
+			required: [ "username", "email", "password" ],
+			properties: {
+				username: {
+					type: "string",
+				},
+				email: {
+					type: "string",
+				},
+				password: {
+					type: "string",
+				},
+				number: {
+					type: "number",
+				},
+			}
+		},
+	}
+}
+
 export async function route( req, res ) {
 
-	let { username, email, password } = req.body
+	let { username, email, password, number } = req.body
+
+	console.log( number, password )
 
 	password = await Argon2.hash( password )
 

@@ -35,9 +35,7 @@ fastify.get( "/users", async ( req, res ) => {
 
 	try {
 
-		const payload = await JWT.verify( token, JWT_SECRET, {
-			expiresIn: ONE_MINUTE,
-		} )
+		const payload = await JWT.verify( token, JWT_SECRET )
 
 		console.log( payload )
 	}
@@ -75,7 +73,9 @@ fastify.post( "/join", async ( req, res ) => {
 		is_admin: false,
 	}
 
-	const token = await JWT.sign( payload, JWT_SECRET )
+	const token = await JWT.sign( payload, JWT_SECRET, {
+		expiresIn: ONE_MINUTE,
+	} )
 
 	return {
 		username,
@@ -118,7 +118,9 @@ fastify.post( "/login", async ( req, res ) => {
 		is_admin: user.is_admin,
 	}
 
-	const token = await JWT.sign( payload, JWT_SECRET )
+	const token = await JWT.sign( payload, JWT_SECRET, {
+		expiresIn: ONE_MINUTE,
+	} )
 
 	return {
 		username,

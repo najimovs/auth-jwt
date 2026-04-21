@@ -16,7 +16,8 @@ users.set( "najimov", {
 	password: "$argon2id$v=19$m=65536,t=3,p=4$J4lL7hmDmGkBRyx9uYpMZA$ty8F/aHsEJNmuCIGP5b/LdoH1D8pl7yOqFTiwLVsXBo",
 } )
 
-const JWT_SECRET = process.env.VITE_JWT_SECRET
+const JWT_ACCESS_SECRET = process.env.VITE_JWT_ACCESS_SECRET
+const JWT_REFRESH_SECRET = process.env.VITE_JWT_REFRESH_SECRET
 
 fastify.get( "/", () => ( { message: "ok" } ) )
 
@@ -73,13 +74,18 @@ fastify.post( "/join", async ( req, res ) => {
 		is_admin: false,
 	}
 
-	const token = await JWT.sign( payload, JWT_SECRET, {
+	const accessToken = await JWT.sign( payload, JWT_ACCESS_SECRET, {
 		expiresIn: ONE_MINUTE,
+	} )
+
+	const refreshToken = await JWT.sign( payload, JWT_REFRESH_SECRET, {
+		expiresIn: ONE_MINUTE * 5,
 	} )
 
 	return {
 		username,
-		token
+		accessToken,
+		refreshToken,
 	}
 } )
 
@@ -118,13 +124,18 @@ fastify.post( "/login", async ( req, res ) => {
 		is_admin: user.is_admin,
 	}
 
-	const token = await JWT.sign( payload, JWT_SECRET, {
+	const accessToken = await JWT.sign( payload, JWT_ACCESS_SECRET, {
 		expiresIn: ONE_MINUTE,
+	} )
+
+	const refreshToken = await JWT.sign( payload, JWT_REFRESH_SECRET, {
+		expiresIn: ONE_MINUTE * 5,
 	} )
 
 	return {
 		username,
-		token,
+		accessToken,
+		refreshToken,
 		is_admin: user.is_admin,
 	}
 } )
